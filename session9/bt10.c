@@ -61,21 +61,34 @@ int length(Node* head) {
     return count;
 }
 Node* revertPair(Node* head) {
-    int i=0;
-    Node* current=head;
-    while (current!=NULL) {
-        current=current->next;
-        if (i%2==1) {
-            Node* temp=current->next;
-            current->next=current->next->next;
-            temp->next=current;
-            current=temp;
-        }
-        i++;
+    if (head == NULL || head->next == NULL) return head;
 
+    Node* current = head;
+    Node* prev = NULL;
+
+    // cập nhật head sau khi đổi cặp đầu tiên
+    head = head->next;
+
+    while (current != NULL && current->next != NULL) {
+        Node* temp = current->next;
+
+        // swap 2 node
+        current->next = temp->next;
+        temp->next = current;
+
+        // nối phần trước cặp hiện tại với node mới đứng đầu (temp)
+        if (prev != NULL) {
+            prev->next = temp;
+        }
+
+        // cập nhật prev và current để chuyển sang cặp tiếp theo
+        prev = current;
+        current = current->next;
     }
+
     return head;
 }
+
 void print(Node* head) {
     while (head!=NULL) {
 
