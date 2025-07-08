@@ -1,62 +1,85 @@
-//
-// Created by Cachiu on 8/7/25.
-//
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 #include <ctype.h>
 
 #define MAX 100
 
 typedef struct {
-    char* data[MAX];
+    char data[MAX];
     int top;
 } Stack;
 
-void initStack(Stack* s) {
+void init(Stack* s) {
     s->top = -1;
 }
 
-void push(Stack* s, char* str) {
-    s->data[++(s->top)] = str;
+int isEmpty(Stack* s) {
+    return s->top == -1;
 }
 
-char* pop(Stack* s) {
-    return s->data[(s->top)--];
+char peek(Stack* s) {
+    return s->data[s->top];
 }
 
-char* postfixToInfix(char* expr) {
+void push(Stack* s, char c) {
+    s->data[++(s->top)] = c;
+}
+
+char pop(Stack* s) {
+    if (!isEmpty(s))
+        return s->data[(s->top)--];
+    return '\0';
+}
+
+int precedence(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    return 0;
+}
+
+void infixToPostfix(char* infix, char* postfix) {
     Stack s;
-    initStack(&s);
-    int len = strlen(expr);
+    init(&s);
+    int j = 0;
 
-    for (int i = 0; i < len; i++) {
-        char c = expr[i];
+    for (int i = 0; i < strlen(infix); i++) {
+        char c = infix[i];
 
         if (isspace(c)) continue;
 
         if (isalnum(c)) {
-
-            char* operand = (char*)malloc(2 * sizeof(char));
-            operand[0] = c;
-            operand[1] = '\0';
-            push(&s, operand);
-        } else {
-
-            char* op2 = pop(&s);
-            char* op1 = pop(&s);
-
-
-            char* newExpr = (char*)malloc(strlen(op1) + strlen(op2) + 4);
-            sprintf(newExpr, "(%s%c%s)", op1, c, op2);
-
-            push(&s, newExpr);
-
-
-            free(op1);
-            free(op2);
+            postfix[j++] = c;
+        }
+        else if (c == '(') {
+            push(&s, c);
+        }
+        else if (c == ')') {
+            while (!isEmpty(&s) && peek(&s) != '(') {
+                postfix[j++] = pop(&s);
+            }
+            pop(&s);
+        }
+        else { // toán tử
+            while (!isEmpty(&s) && precedence(peek(&s)) >= precedence(c)) {
+                postfix[j++] = pop(&s);
+            }
+            push(&s, c);
         }
     }
 
-    return pop(&s);
+    // pop còn lại
+    while (!isEmpty(&s)) {
+        postfix[j++] = pop(&s);
+    }
+
+    postfix[j] = '\0';
+}
+int main() {
+    char infix[MAX], postfix[MAX];
+    printf("Nhập biểu thức infix (trung tố): ");
+    fgets(infix, MAX, stdin);
+    infix[strcspn(infix, "\n")] = '\0';
+    infixToPostfix(infix, postfix);
+    printf("Biểu thức postfix là: %s\n", postfix);
+    return 0;
 }

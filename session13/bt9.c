@@ -60,3 +60,17 @@ char* postfixToInfix(char* expr) {
 
     return pop(&s);
 }
+int main() {
+    char expr[MAX];
+
+    printf("Nhập biểu thức hậu tố (postfix): ");
+    fgets(expr, MAX, stdin);
+    expr[strcspn(expr, "\n")] = '\0'; // loại bỏ ký tự '\n' ở cuối dòng
+
+    char* result = postfixToInfix(expr);
+
+    printf("Biểu thức trung tố (infix): %s\n", result);
+
+    free(result); // giải phóng vùng nhớ của kết quả
+    return 0;
+}
