@@ -30,7 +30,6 @@ void push(Stack* stack, const char* url) {
 
 char* pop(Stack* stack) {
     if (isEmpty(stack)) return NULL;
-
     Node* temp = stack->top;
     char* url = (char*)malloc(MAX_URL);
     strcpy(url, temp->url);
@@ -60,7 +59,6 @@ void printStack(Stack* stack) {
     }
 }
 
-// Hàm chính
 int main() {
     Stack backStack, forwardStack;
     initStack(&backStack);
