@@ -144,6 +144,18 @@ Node1* updateCourse(Node1* head, int id) {
     strcpy(current->course.title, updateTitle);
     return head;
 }
+void sell(Node1 *head, Node2 *head2) {
+    Node1 *current = head;
+    while (current != NULL) {
+        Node2 *newNode = (Node2 *) malloc(sizeof(Node2));
+        newNode->course.id = current->course.id;
+        strcpy(newNode->course.title, current->course.title);
+        newNode->course.creidt = current->course.creidt;
+        newNode->next = NULL;
+        newNode->prev = NULL;
+
+    }
+}
 void sortByCredit(Node1 *head) {
     if (head == NULL || head->next == NULL) return;
 
@@ -157,7 +169,6 @@ void sortByCredit(Node1 *head) {
 
         while (ptr->next != lptr) {
             if (ptr->course.creidt > ptr->next->course.creidt) {
-
                 Course temp = ptr->course;
                 ptr->course = ptr->next->course;
                 ptr->next->course = temp;
@@ -173,13 +184,14 @@ int main() {
     int id = -1;
     int choice;
     Node1 *head = NULL;
+    Node2 *head2 = NULL;
     do {
         printf("===========MENU===========\n");
         printf("1.Add course\n");
         printf("2.Display course\n");
         printf("3.Delete course\n");
         printf("4.Update course\n");
-        printf("5.Mark course complete\n");
+        printf("5.Sell\n");
         printf("6.Sort course\n");
         printf("7.Search course\n");
         printf("8.Exit\n");
@@ -192,7 +204,6 @@ int main() {
                 break;
             case 2:
                 display(head);
-
                 break;
             case 3:
                 head = deleteCourse(head, id);
@@ -202,6 +213,7 @@ int main() {
                 break;
 
             case 5:
+                head=sell(head,head2);
                 break;
             case 6:
                 sortByCredit(head);
