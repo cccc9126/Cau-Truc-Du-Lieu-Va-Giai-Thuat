@@ -1,4 +1,10 @@
 //
+// Created by Cachiu on 24/7/25.
+//
+//
+// Created by Cachiu on 24/7/25.
+//
+//
 // Created by Cachiu on 23/7/25.
 //
 #include<stdio.h>
@@ -13,7 +19,7 @@ Node* createNode(int data) {
     newNode->next=NULL;
     return newNode;
 }
-Node* adjacency[4];
+Node* adjacency[10];
 
 
 void createAdjacency(int U, int V) {
@@ -53,5 +59,15 @@ int main() {
     createAdjacency(2,3);
     createAdjacency(2,4);
     createAdjacency(3,4);
-    print();
+    createAdjacency(5,3);
+    createAdjacency(6,3);
+
+
+    Node* current=adjacency[3];
+    int sum=0;
+    while (current!=NULL) {
+        sum++;
+        current=current->next;
+    }
+    printf("Số đỉnh kề với 3 là: %d", sum);
 }
